@@ -32,6 +32,18 @@ def weather():
     print(text)
     playthis(text)
 
+def when():
+    raw = requests.get("http://worldtimeapi.org/api/timezone/Europe/Paris")
+    datetime = raw.json()["datetime"][:-13]
+    tmp = list(datetime)
+    for i in [4,7,10,13,16]:
+        tmp[i] = ' '
+    tmp = ("".join(tmp)).split()
+    print(datetime)
+    text = "nous sommes le "+tmp[2]+" "+tmp[1]+" "+tmp[0] \
+    + " il est" +tmp[3]+" heures "+tmp[4]+" minutes et "+tmp[5]+" secondes"
+    playthis(text)
+
 playthis("Bienvenue "+os.getlogin()+" je suis Jarvis votre assistant vocal")
 
 run = True
@@ -49,6 +61,8 @@ while run:
         run = False
     elif ("météo" in behest) or ("temps" in behest):
         weather()
+    elif "heure" in behest:
+        when()
     
 
 
