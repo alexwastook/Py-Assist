@@ -3,6 +3,7 @@ import requests
 import gtts
 import speech_recognition as sr
 from playsound import playsound
+import pyautogui
 
 r = sr.Recognizer()
 
@@ -44,6 +45,19 @@ def when():
     + " il est" +tmp[3]+" heures "+tmp[4]+" minutes et "+tmp[5]+" secondes"
     playthis(text)
 
+def search(order):
+    order = order.split()
+    text = "firefox"
+    if os.name=='nt':
+        text+= ".exe"
+    text+= " https://www.google.com/search?q="+"+".join(order[order.index("cherche")+1:])
+    os.system(text)
+
+def where_am_i():
+    specs = requests.get("https://ipinfo.io/json")
+    ville = specs.json()["city"]
+    playthis("vous étes a "+ville)
+
 playthis("Bienvenue "+os.getlogin()+" je suis Jarvis votre assistant vocal")
 
 run = True
@@ -63,9 +77,10 @@ while run:
         weather()
     elif "heure" in behest:
         when()
-    
-
-
+    elif "cherche" in behest:
+        search(behest)
+    elif "où suis-je" in behest:
+        where_am_i()
 
 
 playthis("Au revoir !")
