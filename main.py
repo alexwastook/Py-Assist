@@ -16,12 +16,14 @@ def playthis(text):
 def get_audio():
     try:
         with sr.Microphone() as source:
-            audio_data = r.record(source, duration=4)
+            r.adjust_for_ambient_noise(source)
+            # audio_data = r.record(source, duration=4)
+            audio_data = r.listen(source)
             # print("Recognizing...")
             text = r.recognize_google(audio_data, language="fr-FR")
             return text
     except Exception as e:
-        return e
+        return ""
 
 def weather():
     specs = requests.get("https://ipinfo.io/json")
@@ -67,9 +69,10 @@ while run:
 
     # print("Listening...")
     behest = get_audio()
-    print(behest)
 
-    if len(str(behest)) < 1 or ("Jarvis" not in behest):
+    if len(str(behest)) > 1:
+        print(behest)
+    if ("Jarvis" not in behest):
         pass
     elif "déconnexion" in behest:
         run = False
