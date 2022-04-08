@@ -4,6 +4,7 @@ import gtts
 import speech_recognition as sr
 from playsound import playsound
 import pyautogui
+import pywhatkit
 
 r = sr.Recognizer()
 
@@ -49,11 +50,8 @@ def when():
 
 def search(order):
     order = order.split()
-    text = "firefox"
-    if os.name=='nt':
-        text+= ".exe"
-    text+= " https://www.google.com/search?q="+"+".join(order[order.index("cherche")+1:])
-    os.system(text)
+    text+= "".join(order[order.index("cherche")+1:])
+    pywhatkit.search(text)
 
 def where_am_i():
     specs = requests.get("https://ipinfo.io/json")
