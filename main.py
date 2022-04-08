@@ -50,13 +50,18 @@ def when():
 
 def search(order):
     order = order.split()
-    text+= "".join(order[order.index("cherche")+1:])
+    text= "".join(order[order.index("cherche")+1:])
     pywhatkit.search(text)
 
 def where_am_i():
     specs = requests.get("https://ipinfo.io/json")
     ville = specs.json()["city"]
     playthis("vous étes a "+ville)
+
+def youtu(order):
+    order = order.split()
+    text= "".join(order[order.index("joue-moi")+1:])
+    pywhatkit.playonyt(text)
 
 playthis("Bienvenue "+os.getlogin()+" je suis Jarvis votre assistant vocal")
 
@@ -82,6 +87,8 @@ while run:
         search(behest)
     elif "où suis-je" in behest:
         where_am_i()
+    elif "joue-moi" in behest:
+        youtu(behest)
 
 
 playthis("Au revoir !")
