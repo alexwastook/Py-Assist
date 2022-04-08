@@ -7,12 +7,13 @@ import pyautogui
 import pywhatkit
 
 r = sr.Recognizer()
+vol_actions = {"monte": "volumeup", "baisse": "volumedown", "coupe": "volumemute"}
 
-def playthis(text):
-    tts = gtts.gTTS(text, lang='fr')
+def playthis(text, lang='fr'):
+    tts = gtts.gTTS(text, lang=lang)
     tts.save("tmp.mp3")
     playsound("tmp.mp3")
-    os.system('del tmp.mp3' if os.name=='nt' else 'rm -f tmp.mp3')
+    os.system('del tmp.mp3' if os.name=='nt' else 'rm -f tmp.mp3')  
 
 def get_audio():
     try:
@@ -63,6 +64,18 @@ def youtu(order):
     text= "".join(order[order.index("joue-moi")+1:])
     pywhatkit.playonyt(text)
 
+def note():
+    pyautogui.write(get_audio())
+
+def enregistr():
+    pyautogui.hotkey('ctrl', 's')
+
+def blabla(order):
+    order = order.split()
+    text= "".join(order[order.index("de")+1:])
+    text = pywhatkit.info(text, 3, True)
+    playthis(text, 'en')
+
 playthis("Bienvenue "+os.getlogin()+" je suis Jarvis votre assistant vocal")
 
 run = True
@@ -89,6 +102,20 @@ while run:
         where_am_i()
     elif "joue-moi" in behest:
         youtu(behest)
-
+    elif "note" in behest:
+        note()
+    elif "enregistre" in behest:
+        enregistr()
+    elif "valide" in behest:
+        pyautogui.hotkey('enter')
+    elif "son" in behest:
+        if behest.split()[1] in vol_actions.keys():
+            pyautogui.hotkey(vol_actions[behest.split()[1]])
+        else:
+            text = "désoler je ne connais que les options " + " ".join(vol_actions.keys())
+            print(text)
+            playthis(text)
+    elif "parle-moi" in behest:
+        blabla(behest)
 
 playthis("Au revoir !")
